@@ -41,8 +41,9 @@ namespace maps
 	{
 		using TableByArray<T>::values_;
 		using TableByArray<T>::sz_;
-		using TableByArray<T>::clear;
 	public:
+		using TableByArray<T>::clear;
+		using TableByArray<T>::isEmpty;
 		// ctor & dtor
 		UnorderedTable() = default;
 		~UnorderedTable() { clear(); }
@@ -90,8 +91,9 @@ namespace maps
 	{
 		using TableByArray<T>::values_;
 		using TableByArray<T>::sz_;
-		using TableByArray<T>::clear;
 	public:
+		using TableByArray<T>::clear;
+		using TableByArray<T>::isEmpty;
 		// ctor & dtor
 		OrderedTable() = default;
 		~OrderedTable() { clear(); }
