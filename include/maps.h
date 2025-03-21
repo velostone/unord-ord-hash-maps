@@ -39,6 +39,9 @@ namespace maps
 	template<class T>
 	class UnorderedTable : public TableByArray<T>
 	{
+		using TableByArray<T>::values_;
+		using TableByArray<T>::sz_;
+		using TableByArray<T>::clear;
 	public:
 		// ctor & dtor
 		UnorderedTable() = default;
@@ -85,6 +88,9 @@ namespace maps
 	template<class T>
 	class OrderedTable : public TableByArray<T>
 	{
+		using TableByArray<T>::values_;
+		using TableByArray<T>::sz_;
+		using TableByArray<T>::clear;
 	public:
 		// ctor & dtor
 		OrderedTable() = default;
@@ -117,6 +123,7 @@ namespace maps
 				++sz_;
 				return true;
 			}
+			return false;
 		}
 		bool erase(size_t key) override
 		{
@@ -142,6 +149,7 @@ namespace maps
 				}
 				else return false;
 			}
+			return false;
 		}
 		std::pair<size_t, T>& operator[](size_t pos) { return values_.at(pos); }
 	};
