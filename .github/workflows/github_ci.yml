@@ -1,4 +1,4 @@
-name: PolynomialTranslatorBuild
+name: MapsBuild
 
 on:
   push
@@ -14,12 +14,12 @@ jobs:
             cmake --build build
             .\build\bin\test_maps.exe
     
-  linux-build:
+  linux-build:  
     runs-on: ubuntu-20.04
     steps:
         - uses: actions/checkout@v2
         - run: |
             mkdir build
-            cmake -Bbuild -G "Unix Makefiles"       
+            cmake -Bbuild -G "Unix Makefiles" 
             cmake --build build
             ./build/bin/test_maps
