@@ -1,6 +1,9 @@
+#include "gtest.h"
 #include "maps.h"
 
-TEST(UnorderedMap, can_create_onordered_map)
+using namespace maps;
+
+TEST(UnorderedMapTest, can_create_unordered_map)
 {
-  ADD_FAILURE();
+	ADD_FAILURE();
 }

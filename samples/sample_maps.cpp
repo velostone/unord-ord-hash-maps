@@ -5,15 +5,10 @@ using namespace maps;
 
 int main()
 {
-	OrderedTable<int> M;
-	std::cout << M.insert(5, 4);
-	std::cout << M.insert(1, 4);
-	std::cout << M.insert(5, 4);
-	std::cout << M.insert(3, 4);
-	std::cout << M.insert(3, 5);
-	std::cout << M.insert(2, 4);
-	std::cout << M.erase(8);
-	std::cout << M.erase(5);
-	std::cout << M[0].second;
-
+	HashTable<int> M;
+	std::cout << M.insert(13, 4) << std::endl;
+	std::cout << M.insert(20, 5) << std::endl;
+	std::cout << M.erase(20) << std::endl;
+	std::cout << M.erase(13) << std::endl;
+	
 }
