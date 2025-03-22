@@ -5,5 +5,5 @@ using namespace maps;
 
 TEST(UnorderedMapTest, can_create_unordered_map)
 {
-	ADD_FAILURE();
+	ASSERT_NO_THROW(UnorderedTable<int> M);
 }

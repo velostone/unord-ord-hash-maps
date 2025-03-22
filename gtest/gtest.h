@@ -52,6 +52,7 @@
 
 #ifndef GTEST_INCLUDE_GTEST_GTEST_H_
 #define GTEST_INCLUDE_GTEST_GTEST_H_
+#define GTEST_HAS_TR1_TUPLE 0
 
 #include <limits>
 #include <ostream>
@@ -9687,71 +9688,71 @@ void PrintTupleTo(const T& t, ::std::ostream* os);
 // regardless of whether tr1::tuple is implemented using the
 // non-standard variadic template feature or not.
 
-//inline void PrintTo(const ::std::tr1::tuple<>& t, ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1>
-//void PrintTo(const ::std::tr1::tuple<T1>& t, ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2>
-//void PrintTo(const ::std::tr1::tuple<T1, T2>& t, ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3>
-//void PrintTo(const ::std::tr1::tuple<T1, T2, T3>& t, ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3, typename T4>
-//void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4>& t, ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3, typename T4, typename T5>
-//void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5>& t,
-//             ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3, typename T4, typename T5,
-//          typename T6>
-//void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6>& t,
-//             ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3, typename T4, typename T5,
-//          typename T6, typename T7>
-//void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7>& t,
-//             ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3, typename T4, typename T5,
-//          typename T6, typename T7, typename T8>
-//void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8>& t,
-//             ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3, typename T4, typename T5,
-//          typename T6, typename T7, typename T8, typename T9>
-//void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>& t,
-//             ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
-//
-//template <typename T1, typename T2, typename T3, typename T4, typename T5,
-//          typename T6, typename T7, typename T8, typename T9, typename T10>
-//void PrintTo(
-//    const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>& t,
-//    ::std::ostream* os) {
-//  PrintTupleTo(t, os);
-//}
+inline void PrintTo(const ::std::tr1::tuple<>& t, ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1>
+void PrintTo(const ::std::tr1::tuple<T1>& t, ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2>
+void PrintTo(const ::std::tr1::tuple<T1, T2>& t, ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3>& t, ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3, typename T4>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4>& t, ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6, typename T7>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6, typename T7, typename T8>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6, typename T7, typename T8, typename T9>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6, typename T7, typename T8, typename T9, typename T10>
+void PrintTo(
+    const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>& t,
+    ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
 #endif  // GTEST_HAS_TR1_TUPLE
 
 // Overload for std::pair.
