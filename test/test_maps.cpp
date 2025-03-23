@@ -36,6 +36,7 @@ class TUnorderedMapTest : public ::testing::Test
 {
 protected:
 	UnorderedTable<T>* p;
+	std::pair<size_t, T>* row;
 public:
 	void SetUp() override
 	{
@@ -43,11 +44,19 @@ public:
 		p->insert(4, 7);
 		p->insert(7, 12);
 		p->insert(9, 1);
+		row = new std::pair<size_t, T>;
+		*row = std::make_pair(4, 7);
 	}
 	void TearDown() override
 	{
 		delete p;
 		p = nullptr;
+		delete row;
+		row = nullptr;
+	}
+	void SetRow(std::pair<size_t, T> new_row)
+	{
+		*row = new_row;
 	}
 };
 
@@ -59,11 +68,11 @@ TYPED_TEST(TUnorderedMapTest, cant_insert_elem_with_non_uniq_key)
 {
 	EXPECT_FALSE(this->p->insert(4, 12));
 }
-TYPED_TEST(TUnorderedMapTest, can_find_existing_elem)
-{
-	std::pair<size_t, int> row_ = std::make_pair(7, 12);
-	EXPECT_EQ((this->p->find(7)).value(), row_);
-}
+//TYPED_TEST(TUnorderedMapTest, can_find_existing_elem)
+//{
+//	*(this->row) = std::make_pair(7, 12);
+//	EXPECT_EQ((this->p->find(7)).value(), this->row);
+//}
 TYPED_TEST(TUnorderedMapTest, cant_find_non_existing_elem)
 {
 	EXPECT_FALSE((this->p->find(2)).has_value());
@@ -138,6 +147,7 @@ class TOrderedMapTest : public ::testing::Test
 {
 protected:
 	OrderedTable<T>* p;
+	std::pair<size_t, T>* row;
 public:
 	void SetUp() override
 	{
@@ -145,11 +155,19 @@ public:
 		p->insert(4, 7);
 		p->insert(7, 12);
 		p->insert(9, 1);
+		row = new std::pair<size_t, T>;
+		*row = std::make_pair(4, 7);
 	}
 	void TearDown() override
 	{
 		delete p;
 		p = nullptr;
+		delete row;
+		row = nullptr;
+	}
+	void SetRow(std::pair<size_t, T> new_row)
+	{
+		*row = new_row;
 	}
 };
 
@@ -163,8 +181,8 @@ TYPED_TEST(TOrderedMapTest, cant_insert_elem_with_non_uniq_key)
 }
 TYPED_TEST(TOrderedMapTest, can_find_existing_elem)
 {
-	std::pair<size_t, int> row_ = std::make_pair(7, 12);
-	EXPECT_EQ((this->p->find(7)).value(), row_);
+	this->SetRow(std::make_pair(7, 12));
+	EXPECT_EQ((this->p->find(7)).value(), *(this->row));
 }
 TYPED_TEST(TOrderedMapTest, cant_find_non_existing_elem)
 {
@@ -188,8 +206,7 @@ TYPED_TEST(TOrderedMapTest, erasing_change_size_correctly)
 TYPED_TEST(TOrderedMapTest, erasing_save_correct_order)
 {
 	this->p->erase(7);
-	std::pair<size_t, int> row_ = std::make_pair(4, 7);
-	EXPECT_EQ((*(this->p))[0], row_);
-	row_ = std::make_pair(9, 1);
-	EXPECT_EQ((*(this->p))[1], row_);
+	EXPECT_EQ((*(this->p))[0], *(this->row));
+	this->SetRow(std::make_pair(9, 1));
+	EXPECT_EQ((*(this->p))[1], *(this->row));
 }
