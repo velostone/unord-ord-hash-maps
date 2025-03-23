@@ -71,7 +71,7 @@ TYPED_TEST(TUnorderedMapTest, cant_insert_elem_with_non_uniq_key)
 TYPED_TEST(TUnorderedMapTest, can_find_existing_elem)
 {
 	this->SetRow(std::make_pair(7, 12));
-	EXPECT_EQ((this->p->find(7)).value(), *row);
+	EXPECT_EQ((this->p->find(7)).value(), *(this->row));
 }
 TYPED_TEST(TUnorderedMapTest, cant_find_non_existing_elem)
 {
