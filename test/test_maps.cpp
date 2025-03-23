@@ -14,9 +14,12 @@ TEST(UnorderedMapTest, can_insert_elem_with_uniq_key)
 	M.insert(4, 7);
 	M.insert(7, 12);
 	M.insert(9, 1);
-	EXPECT_EQ(M[0], std::make_pair(static_cast<size_t>(4), 7));
-	EXPECT_EQ(M[1], std::make_pair(static_cast<size_t>(7), 12));
-	EXPECT_EQ(M[2], std::make_pair(static_cast<size_t>(9), 1));
+	std::pair<size_t, int> row_ = std::make_pair(4, 7);
+	EXPECT_EQ(M[0], row_);
+	row_ = std::make_pair(7, 12);
+	EXPECT_EQ(M[1], row_);
+	row_ = std::make_pair(9, 1);
+	EXPECT_EQ(M[2], row_);
 }
 TEST(UnorderedMapTest, insertion_change_size_correctly)
 {
@@ -58,7 +61,8 @@ TYPED_TEST(TUnorderedMapTest, cant_insert_elem_with_non_uniq_key)
 }
 TYPED_TEST(TUnorderedMapTest, can_find_existing_elem)
 {
-	EXPECT_EQ((this->p->find(7)).value(), std::make_pair(static_cast<size_t>(7), 12));
+	std::pair<size_t, int> row_ = std::make_pair(7, 12);
+	EXPECT_EQ((this->p->find(7)).value(), row_);
 }
 TYPED_TEST(TUnorderedMapTest, cant_find_non_existing_elem)
 {
@@ -99,9 +103,12 @@ TEST(OrderedMapTest, can_insert_elem_with_uniq_key)
 	M.insert(4, 7);
 	M.insert(7, 12);
 	M.insert(9, 1);
-	EXPECT_EQ(M[0], std::make_pair(4, 7));
-	EXPECT_EQ(M[1], std::make_pair(7, 12));
-	EXPECT_EQ(M[2], std::make_pair(9, 1));
+	std::pair<size_t, int> row_ = std::make_pair(4, 7);
+	EXPECT_EQ(M[0], row_);
+	row_ = std::make_pair(7, 12);
+	EXPECT_EQ(M[1], row_);
+	row_ = std::make_pair(9, 1);
+	EXPECT_EQ(M[2], row_);
 }
 TEST(OrderedMapTest, insertion_change_size_correctly)
 {
@@ -117,9 +124,12 @@ TEST(OrderedMapTest, insertion_save_correct_order)
 	M.insert(9, 1);
 	M.insert(4, 7);
 	M.insert(7, 12);
-	EXPECT_EQ(M[0], std::make_pair(4, 7));
-	EXPECT_EQ(M[1], std::make_pair(7, 12));
-	EXPECT_EQ(M[2], std::make_pair(9, 1));
+	std::pair<size_t, int> row_ = std::make_pair(4, 7);
+	EXPECT_EQ(M[0], row_);
+	row_ = std::make_pair(7, 12);
+	EXPECT_EQ(M[1], row_);
+	row_ = std::make_pair(9, 1);
+	EXPECT_EQ(M[2], row_);
 }
 
 // typed fixture for OrderedTable
@@ -153,7 +163,8 @@ TYPED_TEST(TOrderedMapTest, cant_insert_elem_with_non_uniq_key)
 }
 TYPED_TEST(TOrderedMapTest, can_find_existing_elem)
 {
-	EXPECT_EQ((this->p->find(7)).value(), std::make_pair(static_cast<size_t>(7), 12));
+	std::pair<size_t, int> row_ = std::make_pair(7, 12);
+	EXPECT_EQ((this->p->find(7)).value(), row_);
 }
 TYPED_TEST(TOrderedMapTest, cant_find_non_existing_elem)
 {
@@ -177,6 +188,8 @@ TYPED_TEST(TOrderedMapTest, erasing_change_size_correctly)
 TYPED_TEST(TOrderedMapTest, erasing_save_correct_order)
 {
 	this->p->erase(7);
-	EXPECT_EQ((*(this->p))[0], std::make_pair(static_cast<size_t>(4), 7));
-	EXPECT_EQ((*(this->p))[1], std::make_pair(static_cast<size_t>(9), 1));
+	std::pair<size_t, int> row_ = std::make_pair(4, 7);
+	EXPECT_EQ((*(this->p))[0], row_);
+	row_ = std::make_pair(9, 1);
+	EXPECT_EQ((*(this->p))[1], row_);
 }
