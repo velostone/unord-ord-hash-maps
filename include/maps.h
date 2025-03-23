@@ -32,7 +32,7 @@ namespace maps
 	public:
 		size_t getSize() const noexcept override { return sz_; }
 		bool isEmpty() const noexcept override { return sz_ == 0; }
-		std::pair<size_t, T>& operator[](size_t pos) { return values_.at(pos); }
+		const std::pair<size_t, T>& operator[](size_t pos) const { return values_.at(pos); }
 		void clear() override
 		{
 			values_.clear();
@@ -87,6 +87,14 @@ namespace maps
 				return true;
 			}
 			else return false;
+		}
+		friend std::ostream& operator<< (std::ostream& os, const UnorderedTable<T>& map)
+		{
+			os << std::endl;
+			for (size_t i = 0; i < map.getSize(); ++i)
+				os << map[i].first << " " << map[i].second << std::endl;
+			os << std::endl;
+			return os;
 		}
 	};
 
@@ -157,6 +165,14 @@ namespace maps
 				else return false;
 			}
 			return false;
+		}
+		friend std::ostream& operator<< (std::ostream& os, const OrderedTable<T>& map)
+		{
+			os << std::endl;
+			for (size_t i = 0; i < map.getSize(); ++i)
+				os << map[i].first << " " << map[i].second << std::endl;
+			os << std::endl;
+			return os;
 		}
 	};
 
@@ -282,6 +298,19 @@ namespace maps
 		{ 
 			std::optional<std::pair<size_t, T>> p = find(key);
 			return p.value_or(std::make_pair(0, -1));
+		}
+		friend std::ostream& operator<< (std::ostream& os, const HashTable<T>& map)
+		{
+			os << std::endl;
+			for (size_t i = 0; i < map.values_size_; ++i)
+				if (map.values_[i] != nullptr)
+				{
+					for (auto it = map.values_[i]->begin(); it != map.values_[i]->end(); ++it)
+						os << (*it).first << " " << (*it).second << " ";
+					os << std::endl;
+				}
+			os << std::endl;
+			return os;
 		}
 	};
 }
