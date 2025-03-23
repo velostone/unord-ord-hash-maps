@@ -32,7 +32,7 @@ namespace maps
 	public:
 		size_t getSize() const noexcept override { return sz_; }
 		bool isEmpty() const noexcept override { return sz_ == 0; }
-		std::pair<size_t, T>& operator[](size_t pos) const { return values_.at(pos); }
+		std::pair<size_t, T>& operator[](size_t pos) { return values_.at(pos); }
 		void clear() override
 		{
 			values_.clear();
@@ -167,16 +167,6 @@ namespace maps
 		using TableByArray<T, std::list<std::pair<size_t, T>>*>::values_;
 		using TableByArray<T, std::list<std::pair<size_t, T>>*>::sz_;
 		size_t values_size_ = 0;
-	public:
-		using TableByArray<T, std::list<std::pair<size_t, T>>*>::clear;
-		using TableByArray<T, std::list<std::pair<size_t, T>>*>::isEmpty;
-		// ctor & dtor
-		HashTable(size_t sz = 100) : values_size_(sz) 
-		{
-			values_.resize(values_size_);
-		};
-		~HashTable() { clear(); }
-		// hash functions
 		uint32_t murmurhash3_32(const void* key, size_t length, uint32_t seed = 0) const
 		{
 			const uint8_t* data = static_cast<const uint8_t*>(key);
@@ -196,7 +186,7 @@ namespace maps
 			}
 			const uint8_t* tail = data + nblocks * 4;
 			uint32_t k1 = 0;
-			switch (length & 3) 
+			switch (length & 3)
 			{
 			case 3: k1 ^= tail[2] << 16;
 			case 2: k1 ^= tail[1] << 8;
@@ -214,6 +204,16 @@ namespace maps
 			h1 ^= h1 >> 16;
 			return h1;
 		}
+	public:
+		using TableByArray<T, std::list<std::pair<size_t, T>>*>::clear;
+		using TableByArray<T, std::list<std::pair<size_t, T>>*>::isEmpty;
+		// ctor & dtor
+		HashTable(size_t sz = 100) : values_size_(sz) 
+		{
+			values_.resize(values_size_);
+		};
+		~HashTable() { clear(); }
+		// hash function
 		uint32_t h(size_t key, uint32_t seed = 0) const // size_t to uint32_t & hashing as 32-bit
 		{
 			uint32_t lower = static_cast<uint32_t>(key);
@@ -275,6 +275,6 @@ namespace maps
 			}
 			return false;
 		}
-		std::list<std::pair<size_t, T>>& operator[](size_t pos) const { return *values_.at(pos); }
+		std::list<std::pair<size_t, T>>& operator[](size_t pos) { return *values_.at(pos); }
 	};
 }
