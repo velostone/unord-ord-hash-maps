@@ -68,11 +68,11 @@ TYPED_TEST(TUnorderedMapTest, cant_insert_elem_with_non_uniq_key)
 {
 	EXPECT_FALSE(this->p->insert(4, 12));
 }
-//TYPED_TEST(TUnorderedMapTest, can_find_existing_elem)
-//{
-//	*(this->row) = std::make_pair(7, 12);
-//	EXPECT_EQ((this->p->find(7)).value(), this->row);
-//}
+TYPED_TEST(TUnorderedMapTest, can_find_existing_elem)
+{
+	this->SetRow(std::make_pair(7, 12));
+	EXPECT_EQ((this->p->find(7)).value(), *row);
+}
 TYPED_TEST(TUnorderedMapTest, cant_find_non_existing_elem)
 {
 	EXPECT_FALSE((this->p->find(2)).has_value());
@@ -174,7 +174,7 @@ public:
 typedef ::testing::Types<int, float, double> types;
 TYPED_TEST_CASE(TOrderedMapTest, types);
 
-// typed tests for UndorderedTable
+// typed tests for OrderedTable
 TYPED_TEST(TOrderedMapTest, cant_insert_elem_with_non_uniq_key)
 {
 	EXPECT_FALSE(this->p->insert(4, 12));
@@ -210,3 +210,129 @@ TYPED_TEST(TOrderedMapTest, erasing_save_correct_order)
 	this->SetRow(std::make_pair(9, 1));
 	EXPECT_EQ((*(this->p))[1], *(this->row));
 }
+
+// general tests for HashTable
+TEST(HashMapTest, can_create_hash_map)
+{
+	ASSERT_NO_THROW(HashTable<int> M);
+}
+TEST(HashMapTest, can_create_specific_size_hash_map)
+{
+	ASSERT_NO_THROW(HashTable<int> M(150));
+}
+TEST(HashMapTest, can_insert_elem_with_uniq_key)
+{
+	HashTable<int> M;
+	M.insert(4, 7);
+	M.insert(7, 12);
+	M.insert(9, 1);
+	std::pair<size_t, int> row_ = std::make_pair(4, 7);
+	EXPECT_EQ(M[4], row_);
+	row_ = std::make_pair(7, 12);
+	EXPECT_EQ(M[7], row_);
+	row_ = std::make_pair(9, 1);
+	EXPECT_EQ(M[9], row_);
+}
+TEST(HashMapTest, insertion_change_size_correctly)
+{
+	HashTable<int> M;
+	M.insert(4, 7);
+	M.insert(7, 12);
+	M.insert(9, 1);
+	EXPECT_EQ(M.getSize(), 3);
+}
+
+// typed fixture for HashTable
+template<class T>
+class THashMapTest : public ::testing::Test
+{
+protected:
+	HashTable<T>* p;
+	std::pair<size_t, T>* row;
+public:
+	void SetUp() override
+	{
+		p = new HashTable<T>;
+		p->insert(4, 7);
+		p->insert(7, 12);
+		p->insert(9, 1);
+		row = new std::pair<size_t, T>;
+		*row = std::make_pair(4, 7);
+	}
+	void TearDown() override
+	{
+		delete p;
+		p = nullptr;
+		delete row;
+		row = nullptr;
+	}
+	void SetRow(std::pair<size_t, T> new_row)
+	{
+		*row = new_row;
+	}
+	void MakeCollision()
+	{
+		// h(4) == h(316) == h(764) == 29
+		p->insert(316, 15);
+		p->insert(764, 3);
+	}
+};
+
+typedef ::testing::Types<int, float, double> types;
+TYPED_TEST_CASE(THashMapTest, types);
+
+// typed tests for HashTable
+TYPED_TEST(THashMapTest, cant_insert_elem_with_non_uniq_key)
+{
+	EXPECT_FALSE(this->p->insert(4, 12));
+}
+TYPED_TEST(THashMapTest, can_find_existing_elem)
+{
+	this->SetRow(std::make_pair(7, 12));
+	EXPECT_EQ((this->p->find(7)).value(), *(this->row));
+}
+TYPED_TEST(THashMapTest, cant_find_non_existing_elem)
+{
+	EXPECT_FALSE((this->p->find(2)).has_value());
+}
+TYPED_TEST(THashMapTest, can_erase_existing_elem)
+{
+	this->p->erase(7);
+	EXPECT_FALSE(this->p->find(7).has_value());
+}
+TYPED_TEST(THashMapTest, cant_erase_non_existing_elem)
+{
+	EXPECT_FALSE(this->p->erase(10));
+}
+TYPED_TEST(THashMapTest, erasing_change_size_correctly)
+{
+	this->p->erase(4);
+	this->p->erase(7);
+	EXPECT_EQ(this->p->getSize(), 1);
+}
+TYPED_TEST(THashMapTest, can_create_hash_of_elem)
+{
+	ASSERT_NO_THROW(this->p->h(15));
+}
+TYPED_TEST(THashMapTest, can_insert_elem_with_collision)
+{
+	this->MakeCollision();
+	EXPECT_EQ((*(this->p))[4], *(this->row));
+	this->SetRow(std::make_pair(316, 15));
+	EXPECT_EQ((*(this->p))[316], *(this->row));
+	this->SetRow(std::make_pair(764, 3));
+	EXPECT_EQ((*(this->p))[764], *(this->row));
+};
+TYPED_TEST(THashMapTest, can_find_elem_with_collision)
+{
+	this->MakeCollision();
+	this->SetRow(std::make_pair(316, 15));
+	EXPECT_EQ((this->p->find(316)).value(), *(this->row));
+};
+TYPED_TEST(THashMapTest, can_erase_elem_with_collision)
+{
+	this->MakeCollision();
+	this->p->erase(764);
+	EXPECT_FALSE((this->p->find(764)).has_value());
+};
+

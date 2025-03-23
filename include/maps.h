@@ -165,8 +165,8 @@ namespace maps
 	{
 		// separate chaining is used as a collision resolution technique
 		using TableByArray<T, std::list<std::pair<size_t, T>>*>::values_;
-		using TableByArray<T, std::list<std::pair<size_t, T>>*>::sz_;
-		size_t values_size_ = 0;
+		using TableByArray<T, std::list<std::pair<size_t, T>>*>::sz_; // number of records
+		size_t values_size_ = 0; // number of rows (vector size)
 		uint32_t murmurhash3_32(const void* key, size_t length, uint32_t seed = 0) const
 		{
 			const uint8_t* data = static_cast<const uint8_t*>(key);
@@ -242,6 +242,7 @@ namespace maps
 				auto p = new std::list<std::pair<size_t, T>>;
 				p->push_back(std::make_pair(key, data));
 				values_[idx] = p;
+				++sz_;
 				return true;
 			}
 			else
@@ -250,6 +251,7 @@ namespace maps
 				else
 				{
 					values_[idx]->push_back(std::make_pair(key, data));
+					++sz_;
 					return true;
 				}
 			}
@@ -269,12 +271,17 @@ namespace maps
 						{
 							delete values_[idx];
 							values_[idx] = nullptr;
+							--sz_;
 						}
 						return true;
 					}
 			}
 			return false;
 		}
-		std::list<std::pair<size_t, T>>& operator[](size_t pos) { return *values_.at(pos); }
+		std::pair<size_t, T> operator[](size_t key) 
+		{ 
+			std::optional<std::pair<size_t, T>> p = find(key);
+			return p.value_or(std::make_pair(0, -1));
+		}
 	};
 }
