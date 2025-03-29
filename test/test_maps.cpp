@@ -224,6 +224,7 @@ TEST(HashMapTest, can_insert_elem_with_uniq_key)
 {
 	HashTable<int> M;
 	M.insert(4, 7);
+	M[4];
 	M.insert(7, 12);
 	M.insert(9, 1);
 	std::pair<size_t, int> row_ = std::make_pair(4, 7);
@@ -272,9 +273,9 @@ public:
 	}
 	void MakeCollision()
 	{
-		// h(4) == h(316) == h(764) == 29
-		p->insert(316, 15);
-		p->insert(764, 3);
+		// h(4) == h(297) == h(769) == 89
+		p->insert(297, 15);
+		p->insert(769, 3);
 	}
 };
 
@@ -318,21 +319,21 @@ TYPED_TEST(THashMapTest, can_insert_elem_with_collision)
 {
 	this->MakeCollision();
 	EXPECT_EQ((*(this->p))[4], *(this->row));
-	this->SetRow(std::make_pair(316, 15));
-	EXPECT_EQ((*(this->p))[316], *(this->row));
-	this->SetRow(std::make_pair(764, 3));
-	EXPECT_EQ((*(this->p))[764], *(this->row));
+	this->SetRow(std::make_pair(297, 15));
+	EXPECT_EQ((*(this->p))[297], *(this->row));
+	this->SetRow(std::make_pair(769, 3));
+	EXPECT_EQ((*(this->p))[769], *(this->row));
 };
 TYPED_TEST(THashMapTest, can_find_elem_with_collision)
 {
 	this->MakeCollision();
-	this->SetRow(std::make_pair(316, 15));
-	EXPECT_EQ((this->p->find(316)).value(), *(this->row));
+	this->SetRow(std::make_pair(297, 15));
+	EXPECT_EQ((this->p->find(297)).value(), *(this->row));
 };
 TYPED_TEST(THashMapTest, can_erase_elem_with_collision)
 {
 	this->MakeCollision();
-	this->p->erase(764);
-	EXPECT_FALSE((this->p->find(764)).has_value());
+	this->p->erase(769);
+	EXPECT_FALSE((this->p->find(769)).has_value());
 };
 

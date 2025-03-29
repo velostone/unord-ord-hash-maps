@@ -177,11 +177,11 @@ namespace maps
 	};
 
 	template<class T>
-	class HashTable : public TableByArray<T, std::list<std::pair<size_t, T>>*>
+	class HashTable : public TableByArray<T, std::list<std::pair<size_t, T>>>
 	{
 		// separate chaining is used as a collision resolution technique
-		using TableByArray<T, std::list<std::pair<size_t, T>>*>::values_;
-		using TableByArray<T, std::list<std::pair<size_t, T>>*>::sz_; // number of records
+		using TableByArray<T, std::list<std::pair<size_t, T>>>::values_;
+		using TableByArray<T, std::list<std::pair<size_t, T>>>::sz_; // number of records
 		size_t values_size_ = 0; // number of rows (vector size)
 		uint32_t murmurhash3_32(const void* key, size_t length, uint32_t seed = 0) const
 		{
@@ -221,10 +221,10 @@ namespace maps
 			return h1;
 		}
 	public:
-		using TableByArray<T, std::list<std::pair<size_t, T>>*>::clear;
-		using TableByArray<T, std::list<std::pair<size_t, T>>*>::isEmpty;
+		using TableByArray<T, std::list<std::pair<size_t, T>>>::clear;
+		using TableByArray<T, std::list<std::pair<size_t, T>>>::isEmpty;
 		// ctor & dtor
-		HashTable(size_t sz = 100) : values_size_(sz) 
+		HashTable(size_t sz = 128) : values_size_(sz) 
 		{
 			values_.resize(values_size_);
 		};
@@ -242,53 +242,33 @@ namespace maps
 		std::optional<std::pair<size_t, T>> find(size_t key) const override
 		{
 			auto idx = h(key);
-			if (values_[idx] != nullptr)
+			if (values_[idx].size())
 			{
 				auto list_ = values_[idx];
-				for (auto it = list_->begin(); it != list_->end(); ++it)
+				for (auto it = list_.begin(); it != list_.end(); ++it)
 					if ((*it).first == key) return *it;
 			}
 			return std::nullopt;
 		}
 		bool insert(size_t key, const T& data) override
 		{
+			if (find(key).has_value()) return false;
 			auto idx = h(key);
-			if (values_[idx] == nullptr)
-			{
-				auto p = new std::list<std::pair<size_t, T>>;
-				p->push_back(std::make_pair(key, data));
-				values_[idx] = p;
-				++sz_;
-				return true;
-			}
-			else
-			{
-				if (find(key).has_value()) return false;
-				else
-				{
-					values_[idx]->push_back(std::make_pair(key, data));
-					++sz_;
-					return true;
-				}
-			}
-			return false;
+			values_[idx].push_back(std::make_pair(key, data));
+			++sz_;
+			return true;
 		}
 		bool erase(size_t key) override
 		{
 			auto idx = h(key);
-			if (values_[idx] == nullptr) return false;
+			if (!values_[idx].size()) return false;
 			else
 			{
-				for (auto it = values_[idx]->begin(); it != values_[idx]->end(); ++it)
+				for (auto it = values_[idx].begin(); it != values_[idx].end(); ++it)
 					if ((*it).first == key)
 					{
-						values_[idx]->erase(it);
-						if (values_[idx]->size() == 0)
-						{
-							delete values_[idx];
-							values_[idx] = nullptr;
-							--sz_;
-						}
+						values_[idx].erase(it);
+						--sz_;
 						return true;
 					}
 			}
@@ -303,9 +283,9 @@ namespace maps
 		{
 			os << std::endl;
 			for (size_t i = 0; i < map.values_size_; ++i)
-				if (map.values_[i] != nullptr)
+				if (!map.values_[i].size())
 				{
-					for (auto it = map.values_[i]->begin(); it != map.values_[i]->end(); ++it)
+					for (auto it = map.values_[i].begin(); it != map.values_[i].end(); ++it)
 						os << (*it).first << " " << (*it).second << " ";
 					os << std::endl;
 				}
